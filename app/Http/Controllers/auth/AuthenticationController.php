@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
 {
-    //
+    /**
+     
+     *
+     * @operationId login
+     */
     public function login(Request $request){
         try {
             $messages = [
