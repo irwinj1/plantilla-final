@@ -63,4 +63,9 @@ Agregar nombre descriptivo al endpoint
      */
 Mas información en https://scramble.dedoc.co/
 
+## conventional commit 
+1. Ejecutar npm install
+2. Guardar cambios con git add .
+3. ejecutar comando "npx cz" y seguir los pasos para crear el convetional commit
+
 ## Ejemplos de usos de plantilla
