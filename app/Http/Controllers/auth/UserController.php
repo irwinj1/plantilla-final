@@ -37,6 +37,7 @@ class UserController extends Controller
            return $this->success('Lista de usuarios',200,$userData, $pagination);
         } catch (\Exception $e) {
             //throw $th;
+            return $this->error('Error al cargar los usuarios');
         }
        
     }
