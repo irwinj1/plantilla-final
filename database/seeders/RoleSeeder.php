@@ -13,11 +13,21 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        Role::create(['name' => 'Super Admin']);
-
-        $admin = Role::create(['name' => 'Admin']);
-        $admin->givePermissionTo([
+        $roles = ['Super Admin', 'Admin', 'User'];
+        $guards = ['web', 'api'];
+    
+        // ✅ 1. Crear roles para web y api
+        foreach ($roles as $role) {
+            foreach ($guards as $guard) {
+                Role::firstOrCreate([
+                    'name' => $role,
+                    'guard_name' => $guard
+                ]);
+            }
+        }
+    
+        // ✅ 2. Asignar permisos al rol Admin (para ambos guards)
+        $adminPermissions = [
             'create_permission',
             'edit_permission',
             'delete_permission',
@@ -26,12 +36,26 @@ class RoleSeeder extends Seeder
             'edit_user',
             'delete_user',
             'view_user',
-        ]);
-
-        $user = Role::create(['name' => 'User']);
-        $user->givePermissionTo([
+        ];
+    
+        foreach ($guards as $guard) {
+            $adminRole = Role::where('name', 'Admin')->where('guard_name', $guard)->first();
+            if ($adminRole) {
+                $adminRole->syncPermissions($adminPermissions);
+            }
+        }
+    
+        // ✅ 3. Asignar permisos al rol User (para ambos guards)
+        $userPermissions = [
             'view_permission',
             'view_user',
-        ]);
+        ];
+    
+        foreach ($guards as $guard) {
+            $userRole = Role::where('name', 'User')->where('guard_name', $guard)->first();
+            if ($userRole) {
+                $userRole->syncPermissions($userPermissions);
+            }
+        }
     }
 }

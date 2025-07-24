@@ -12,4 +12,5 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:api')->prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index'])->middleware('rolePermission:Super Admin');
+    Route::post('/', [UserController::class, 'createUser'])->middleware('rolePermission:Super Admin');
 });
