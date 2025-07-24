@@ -40,7 +40,7 @@ php artisan make:model User
 # Generar un nuevo controlador
 php artisan make:controller UserController
 
-# Ver toda la información de un modelo
+# Ver toda la información de un modelo y agregar los modelos de los logs dentro de la carpeta Log
 php artisan model:show User
 
 # Generar migraciones
@@ -69,3 +69,11 @@ Mas información en https://scramble.dedoc.co/
 3. ejecutar comando "npx cz" y seguir los pasos para crear el convetional commit
 
 ## Ejemplos de usos de plantilla
+
+### Uso de controlador
+Revisar controlador UseController metodo index para ejemplo de consulta con cache y redis y sin cache para los metodos get.
+
+### Ejemplo modelo para logs
+1. Se recomienda crear un modelo para cada logs que desea guardar
+2. Revisar ejemplo de modelo que esta en carpeta Model/Logs 
+3. Para guardar los logs revisar metodo createUser dentro de UseController.

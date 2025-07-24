@@ -8,6 +8,7 @@ use App\Models\Logs\Logs;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,11 +16,22 @@ class UserController extends Controller
 {
     //
     use ApiResponse;
-    public function index()
+    public function index(Request $request)
     {
         try {
-            //code...
-            $user = User::paginate(10);
+             // Usamos un cache key único para cada página/filtro
+            $page = $request->get('page', 1);
+
+            //ejemplo con cache
+           $cacheKey = "api_users_page_{$page}";
+
+            $user =Cache::remember($cacheKey,600,function(){
+                return  User::with(['roles'])->paginate(10);
+            });
+
+
+            //ejemplo sin cache
+            //$user = User::with(['roles'])->paginate(10);
             $pagination = [
                 'lastPage'=>$user->lastPage(),
                 'currentPage'=>$user->currentPage(),
