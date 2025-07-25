@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sesiones\ActiveSesion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -47,6 +48,11 @@ class AuthenticationController extends Controller
             }
     
             $user = auth('api')->user();
+            ActiveSesion::updateOrCreate(['user_id'=>$user->id],[
+                'roles'=>$user->getRoleNames()->toArray(),
+                'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
+                'last_activity' => now()
+            ]);
             if (!Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'error' => ['password' => ['La contraseña es incorrecta.']]

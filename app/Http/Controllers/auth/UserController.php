@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Helpers\CacheHelper;
 
 class UserController extends Controller
 {
@@ -25,7 +26,7 @@ class UserController extends Controller
             //ejemplo con cache
            $cacheKey = "api_users_page_{$page}";
 
-            $user =Cache::remember($cacheKey,600,function(){
+            $user = CacheHelper::remember($cacheKey,600,function(){
                 return  User::with(['roles'])->paginate(10);
             });
 
