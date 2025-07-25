@@ -81,4 +81,12 @@ class UserController extends Controller
         }
     }
 
+    public function createPermission(){
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
 }

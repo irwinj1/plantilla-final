@@ -72,5 +72,50 @@ class AuthenticationController extends Controller
         }
 
     }
+
+    public function refresh(){
+        try {
+            if (!$token = auth('api')->refresh()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No se pudo refrescar el token'
+                ], 401);
+            }
+
+            $user = auth('api')->user();
+
+            return response()->json([
+                'status' => true,
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth('api')->factory()->getTTL() * 60,
+                'user' => $user,
+                'roles' => $user->getRoleNames(),
+                'permissions' => $user->getAllPermissions()->pluck('name')
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al refrescar el token',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function logout(){
+        try {
+            auth('api')->logout();
+            return response()->json([
+               'status' => true,
+               'message' => 'Sesión cerrada correctamente'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+               'status' => false,
+               'message' => 'Error al cerrar sesión',
+              'error' => $th->getMessage()
+            ], 500);
+        }
+    }
 }
 
