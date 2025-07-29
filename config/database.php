@@ -84,7 +84,7 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_CONNECTION', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'your_postgres_db'),
             'username' => env('DB_USERNAME', 'your_pg_user'),
@@ -110,9 +110,15 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
         'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI'),
-            'database' => env('MONGODB_CONECTION'),
+            'driver'   => 'mongodb',
+            'host'     => env('DB_CONNECTION_MONGO', 'mongodb'),
+            'port'     => env('MONGO_PORT', 27017),
+            'database' => env('MONGO_DB', 'test'),
+            'username' => env('MONGO_ROOT_USERNAME', 'root'),
+            'password' => env('MONGO_ROOT_PASSWORD', 'P4ssw0rd'),
+            'options'  => [
+                'authSource' => 'admin',
+            ],
         ],
 
     ],

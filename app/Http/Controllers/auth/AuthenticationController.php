@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sesiones\ActiveSesion;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,7 @@ class AuthenticationController extends Controller
      *
      * @operationId login
      */
+    use ApiResponse;
     public function login(Request $request){
         try {
             $messages = [
@@ -58,8 +60,7 @@ class AuthenticationController extends Controller
                     'error' => ['password' => ['La contraseña es incorrecta.']]
                 ], 401);
             }
-    
-            return response()->json([
+            $usuarios = [
                 'status' => true,
                 'access_token' => $token,
                 'token_type' => 'bearer',
@@ -67,14 +68,12 @@ class AuthenticationController extends Controller
                 'user' => $user,
                 'roles' => $user->getRoleNames(),
                 'permissions' => $user->getAllPermissions()->pluck('name')
-            ], 200);
+            ];
+            return $this->success('Inicio de sesión exitoso', 200, $usuarios);
     
         } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error en el servidor',
-                'error' => $th->getMessage()
-            ], 500);
+            $this->error('Error al iniciar sesión');
+            
         }
 
     }
@@ -89,8 +88,7 @@ class AuthenticationController extends Controller
             }
 
             $user = auth('api')->user();
-
-            return response()->json([
+            $usuario = [
                 'status' => true,
                 'access_token' => $token,
                 'token_type' => 'bearer',
@@ -98,29 +96,21 @@ class AuthenticationController extends Controller
                 'user' => $user,
                 'roles' => $user->getRoleNames(),
                 'permissions' => $user->getAllPermissions()->pluck('name')
-            ], 200);
+            ];
+            return $this->success('Token refrescado exitosamente', 200, $usuario);
         } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error al refrescar el token',
-                'error' => $th->getMessage()
-            ], 500);
+            $this->error('Error al refrescar el token');
+          
         }
     }
 
     public function logout(){
         try {
             auth('api')->logout();
-            return response()->json([
-               'status' => true,
-               'message' => 'Sesión cerrada correctamente'
-            ], 200);
+            return $this->success('Se cerro sesión coreectamente',200);
         } catch (\Throwable $th) {
-            return response()->json([
-               'status' => false,
-               'message' => 'Error al cerrar sesión',
-              'error' => $th->getMessage()
-            ], 500);
+            $this->error('Error al cerrar sesión');
+           
         }
     }
 }

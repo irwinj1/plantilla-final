@@ -1,0 +1,84 @@
+services:
+    laravel-app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: "${WWWGROUP:-sail}"
+        image: sail-8.4/app
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "${APP_PORT:-8000}:80"
+        environment:
+            WWWUSER: "${WWWUSER:-sail}"
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: "${SAIL_XDEBUG_MODE:-off}"
+            XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
+        volumes:
+            - ".:/var/www/html"
+            - "./storage:/var/www/html/storage"
+            - "sail-composer:/var/www/html/vendor"
+        networks:
+            - sail
+        depends_on:
+            - pgsql
+            - mongodb
+        user: "${WWWUSER:-sail}:${WWWGROUP:-sail}"
+    pgsql:
+        image: "postgres:17-alpine"
+        ports:
+            - "${FORWARD_DB_PORT:-5454}:5432"
+        environment:
+            PGPASSWORD: "${DB_PASSWORD:-postgres}"
+            POSTGRES_DB: "${DB_DATABASE}"
+            POSTGRES_USER: "${DB_USERNAME}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-postgres}"
+        volumes:
+            - "sail-pgsql:/var/lib/postgresql/data"
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - "-q"
+                - "-d"
+                - "${DB_DATABASE}"
+                - "-U"
+                - "${DB_USERNAME}"
+            retries: 3
+            timeout: 5s
+    mongodb:
+        image: "mongo:8.0-rc"
+        ports:
+            - "${FORWARD_MONGO_PORT:-27027}:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: "${MONGO_ROOT_USERNAME:-root}"
+            MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD:-P4ssw0rd}"
+        volumes:
+            - "sail-mongodb:/data/db"
+        networks:
+            - sail
+
+     # Redis
+    redis:
+      image: redis:7-alpine
+      container_name: laravel_redis
+      restart: unless-stopped
+      ports:
+        - "6378:6379"
+      networks:
+        - sail
+
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-pgsql:
+        driver: local
+    sail-mongodb:
+        driver: local
+    sail-composer:
+        driver: local
+
