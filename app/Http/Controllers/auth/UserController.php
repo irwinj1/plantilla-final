@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\CacheHelper;
-
+use App\Http\Requests\RolesOrPermission\AsignarPermisosUsuarioRequest;
 
 class UserController extends Controller
 {
@@ -76,7 +76,15 @@ class UserController extends Controller
                 'email'=>$validated['email'],
                 'password'=>Hash::make($validated['password'])
             ]);
-            $user->assignRole('Admin');
+            if($request->has('rol')){
+                $user->assignRole($validated['rol']);
+            }
+            
+            if($request->has('permisos')){
+                foreach($validated['permisos'] as $permiso){
+                    $user->givePermissionTo($permiso);
+                }
+            }
 
             Logs::create([
                 'action' => 'create_user',
@@ -93,6 +101,31 @@ class UserController extends Controller
         }
     }
 
-   
+    /**
+     
+     *
+     * @operationId Agregar permisos a usuarios
+     */
+   public function AgregarPermisoUsuario(AsignarPermisosUsuarioRequest $request, $userId){
+    try {
+        DB::beginTransaction();
+        $validated = $request->validated();
+        $user = User::find($userId);
+        foreach($validated['permisos'] as $permiso){
+            //validar si el permiso ya esta asignado al usuario
+            if($user->hasPermissionTo($permiso)){
+                continue;
+            }
+
+            $user->givePermissionTo($permiso);
+        }
+        DB::commit();
+        return $this->success('Permisos asignados correctamente',200,$user);
+    } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return $this->error("Error al asignar permisos");
+    }
+   }
 
 }

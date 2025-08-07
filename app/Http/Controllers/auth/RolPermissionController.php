@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RolesOrPermission\AsignarPermisosUsuarioRequest;
 use App\Http\Requests\RolesOrPermission\CreatePermissionRequest;
 use App\Http\Requests\RolesOrPermission\CreateRolRequest;
 use App\Traits\ApiResponse;
@@ -80,7 +81,7 @@ class RolPermissionController extends Controller
 
         } catch (\Exception $e) {
             //throw $th;
-            return $this->error('Error al crear el permiso '+ $e->getMessage());
+            return $this->error('Error al crear el permiso ');
         }
     }
 
@@ -104,7 +105,53 @@ class RolPermissionController extends Controller
             return $this->success('Rol creado',200,$validated);
         } catch (\Exception $e) {
             //throw $th;
-            return $this->error('Error al crear el rol '+ $e->getMessage());
+            return $this->error('Error al crear el rol ');
+        }
+    }
+    /**
+     
+     *
+     * @operationId Eliminar Rol
+     */
+    public function elminarRol($id){
+        try {
+            //code...
+            $rol = Role::find($id);
+            if(!$rol){
+                return $this->error('Rol no encontrado',404);
+            }
+            //eliminar permisos del rol
+            $rol->syncPermissions([]);
+            //eliminar rol
+            $rol->delete();
+            return $this->success('Rol eliminado',200);
+        } catch (\Exception $e) {
+            //throw $th;
+            return $this->error('Error al eliminar el rol ');
+        }
+    }
+
+    /**
+     
+     *
+     * @operationId Eliminar Permiso
+     */
+    public function eliminarPermisos(AsignarPermisosUsuarioRequest $request){
+        try {
+            //code...
+            $validated = $request->validated();
+            $permisos = $validated['permisos'];
+            foreach($permisos as $permiso){
+                $permiso = Permission::find($permiso);
+                if(!$permiso){
+                    return $this->error('Permiso no encontrado',404);
+                }
+                $permiso->delete();
+            }
+            return $this->success('Permisos eliminados',200);
+        } catch (\Exception $e) {
+            //throw $th;
+            return $this->error('Error al eliminar el permiso ');
         }
     }
 }

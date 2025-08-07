@@ -25,6 +25,8 @@ class UsersCreateRequest extends FormRequest
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'rol'=>'required|string|max:100',
+            'permisos'=>'nullable|array'
         ];
     }
     public function messages(): array
@@ -37,6 +39,10 @@ class UsersCreateRequest extends FormRequest
             'password.required' => 'La contraseña es obligatoria',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'password.confirmed' => 'Las contraseñas no coinciden',
+            'rol.required' => 'El rol es obligatorio',
+            'rol.max' => 'El rol no puede tener más de 100 caracteres',
+            'rol.string' => 'El rol debe ser una cadena de texto',
+            'permisos.array' => 'Los permisos deben ser un arreglo'
         ];
     }
 }
