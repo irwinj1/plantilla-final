@@ -337,7 +337,6 @@ composer queues-stop
 > 💡 Si estás usando Docker, ejecuta estos comandos:
 ```shell
 # Si esta usando docker ejecuta los siguientes comandos
-# El comando mantiene los logs en /storage/logs/schedule.log
 docker-compose exec app php artisan key:generate --env=testing 
 docker-compose exec app php artisan  jwt:secret --env=testing
 docker-compose exec app php artisan test
@@ -345,8 +344,7 @@ docker-compose exec app php artisan test
 ```
 > 💡 Si no usas docker, ejecuta estos comandos:
 ```shell
-# Si esta usando docker ejecuta los siguientes comandos
-# El comando mantiene los logs en /storage/logs/schedule.log
+# Si no usas docker, ejecuta los siguientes comandos
 php artisan key:generate --env=testing 
 php artisan  jwt:secret --env=testing
 php artisan test
