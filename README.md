@@ -57,6 +57,20 @@ Configurar parámetros principales en archivo `.env`
   - `MAIL_FROM_NAME`: Nombre del remitente, este se visualiza como sujeto en el correo recibido
 - Las configuraciones Docker solo se deben modificar en entorno de desarrollo si se desea
 
+### 1.1 Variables de entorno testing
+```shell
+cp .env.testing.example .env.testing
+```
+Configurar parámetros 
+
+- `APP_URL`: URL en la que se sirve la aplicación
+- Configuración de base de datos **Postgres**
+  - `DB_HOST`
+  - `DB_PORT`
+  - `DB_DATABASE`
+  - `DB_USERNAME`
+  - `DB_PASSWORD`
+
 ### 2. Uso de Docker Compose
 
 > 💡 Usa esto solo si es entorno de desarrollo, sino, pasa al paso 3
@@ -319,6 +333,12 @@ composer queues-stop
 - **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
 
 # Testing
+## comando a ejecutar
+
+> 💡 Si estás usando Docker, ejecuta estos comandos:
+> `docker-compose exec app php artisan key:generate --env=testing`. 
+> `docker-compose exec app php artisan  jwt:secret --env=testing`. 
+> `docker-compose exec app php artisan test`. 
 
 ## Nomenclatura y lineamientos
 
