@@ -24,4 +24,6 @@ Route::middleware('auth:api')->prefix('rol-permisos')->group(function () {
     Route::get('/lista-roles',[RolPermissionController::class,'ListRole'])->middleware('rolePermission:Super Admin');
     Route::post('create-permission',[RolPermissionController::class,'createPermission'])->middleware('rolePermission:Super Admin');
     Route::post('/create-rol',[RolPermissionController::class,'createRol'])->middleware('rolePermission:Super Admin');
+    Route::delete('/eliminar-rol/{id}',[RolPermissionController::class,'elminarRol'])->middleware('rolePermission:Super Admin');
+    Route::delete('/eliminar-permiso',[RolPermissionController::class,'eliminarPermisos'])->middleware('rolePermission:Super Admin');
 });
