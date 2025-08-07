@@ -333,12 +333,26 @@ composer queues-stop
 - **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
 
 # Testing
-## comando a ejecutar
-
+## comandos a ejecutar
 > 💡 Si estás usando Docker, ejecuta estos comandos:
-> `docker-compose exec app php artisan key:generate --env=testing`. 
-> `docker-compose exec app php artisan  jwt:secret --env=testing`. 
-> `docker-compose exec app php artisan test`. 
+```shell
+# Si esta usando docker ejecuta los siguientes comandos
+# El comando mantiene los logs en /storage/logs/schedule.log
+docker-compose exec app php artisan key:generate --env=testing 
+docker-compose exec app php artisan  jwt:secret --env=testing
+docker-compose exec app php artisan test
+
+```
+> 💡 Si no usas docker, ejecuta estos comandos:
+```shell
+# Si esta usando docker ejecuta los siguientes comandos
+# El comando mantiene los logs en /storage/logs/schedule.log
+php artisan key:generate --env=testing 
+php artisan  jwt:secret --env=testing
+php artisan test
+
+```
+ 
 
 ## Nomenclatura y lineamientos
 
