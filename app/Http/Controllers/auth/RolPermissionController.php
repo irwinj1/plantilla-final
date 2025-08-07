@@ -113,7 +113,7 @@ class RolPermissionController extends Controller
      *
      * @operationId Eliminar Rol
      */
-    public function elminarRol($id){
+    public function eliminarRol($id){
         try {
             //code...
             $rol = Role::find($id);

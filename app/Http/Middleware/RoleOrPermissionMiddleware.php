@@ -16,7 +16,7 @@ class RoleOrPermissionMiddleware
         $user = $request->user(); // auth('api')->user() si usas JWT u otro guard
 
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // Permite pasar roles separados por coma en un solo parámetro
