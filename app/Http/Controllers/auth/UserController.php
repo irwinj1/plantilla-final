@@ -12,15 +12,17 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\CacheHelper;
-use App\Http\Requests\RolesOrPermission\CreateRolRequest;
-use App\Http\Requests\RolesOrPermission\PermissionRequest;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
 
 class UserController extends Controller
 {
     //
     use ApiResponse;
+    /**
+     
+     *
+     * @operationId Lista Usuarios
+     */
     public function index(Request $request)
     {
         try {
@@ -59,6 +61,11 @@ class UserController extends Controller
        
     }
 
+    /**
+     
+     *
+     * @operationId Crear Usuarios
+     */
     public function createUser(UsersCreateRequest $request){
         DB::beginTransaction();
         try {
@@ -86,54 +93,6 @@ class UserController extends Controller
         }
     }
 
-    public function createPermission(PermissionRequest $request){
-        try {
-            //code...
-            $validated = $request->validated();
-
-            DB::beginTransaction();
-            $createdPermissions = [];
-            
-            foreach ($validated['name'] as $permission) {
-                // Check if permission already exists
-                if (!Permission::where('name', $permission)->exists()) {
-                    $newPermission = Permission::create(['name' => $permission]);
-                    $createdPermissions[] = $newPermission;
-                }
-            }
-            
-            DB::commit();
-
-            if (empty($createdPermissions)) {
-                return $this->error('Error al crear los permisos.', 401);
-            }
-            
-
-            return $this->success('Permiso creado',200,$validated);
-
-        } catch (\Exception $e) {
-            //throw $th;
-            return $this->error('Error al crear el permiso '+ $e->getMessage());
-        }
-    }
-
-    public function createRol(CreateRolRequest $request){
-        try {
-            //code...
-            $validated = $request->validated();
-            DB::beginTransaction();
-               $rol = Role::create([
-                    'name'=>$validated['name']
-                ]);
-                //asignar permisos a rol
-                $rol->syncPermissions($validated['permissions']);
-            DB::commit();
-          
-            return $this->success('Rol creado',200,$validated);
-        } catch (\Exception $e) {
-            //throw $th;
-            return $this->error('Error al crear el rol '+ $e->getMessage());
-        }
-    }
+   
 
 }

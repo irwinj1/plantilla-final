@@ -93,7 +93,9 @@ docker compose down -v
 ```shell
 composer install
 ```
-
+```shell
+npm install
+```
 ### 4. JWT y llave de aplicación
 
 > 💡 Si estás usando Docker, estos comandos deben estructurarse de la siguiente manera:
@@ -110,9 +112,13 @@ php artisan jwt:secret
 
 ### 5. Generación de documentación de API
 
-```shell
-php artisan l5-swagger:generate
-```
+Se instaló scramble doc, para generar la documentación de la API.
+Para cambia nombre que se mostrara del metodo se puede utilizar el siguiente comentario antes de cada metodo:
+      /**
+     
+     *
+     * @operationId nombre a mostrar
+     */
 
 ### 6. Migraciones y seeders
 
@@ -217,7 +223,7 @@ composer queues-stop
     - PUT inventario/{id_inventario}/balance-existencia
   - De preferencia no usar más de tres divisiones en la ruta
 
-- Las rutas deben ser nombradas ya que al usarse en la ejecución de las pruebas unitarias será necesario este nombre, por ejemplo, la ruta `/api/auth/login` posee el nombre `public.auth.login`
+- Las rutas deben ser nombradas ya que al usarse en la ejecución de las pruebas unitarias será necesario este nombre, por ejemplo, la ruta `/auth/login` posee el nombre `public.auth.login`
   - `public.` es el nombre del grupo configurado en `bootstrap\app.php`
   - `auth.` es el grupo donde se importan en `routes\public.php`
   - `login` es el nombre de la ruta específica existente en `routes\public\auth.php`

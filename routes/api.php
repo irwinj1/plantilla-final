@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\auth\RolPermissionController;
 use App\Http\Controllers\auth\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
-    Route::post('/logout',[AuthenticationController::class,'logout'])->middleware('rolePermission');
+    Route::post('/logout',[AuthenticationController::class,'logout'])->middleware('rolePermission:Super Admin,Admin');
 });
 
 Route::middleware('auth:api')->prefix('users')->group(function () {
@@ -16,4 +17,11 @@ Route::middleware('auth:api')->prefix('users')->group(function () {
     Route::post('/', [UserController::class, 'createUser'])->middleware('rolePermission:Super Admin');
     Route::post('create-permission',[UserController::class,'createPermission'])->middleware('rolePermission:Super Admin');
     Route::post('/create-rol',[UserController::class,'createRol'])->middleware('rolePermission:Super Admin');
+});
+
+Route::middleware('auth:api')->prefix('rol-permisos')->group(function () {
+    Route::get('/lista-permisos',[RolPermissionController::class,'ListPermission'])->middleware('rolePermission:Super Admin');
+    Route::get('/lista-roles',[RolPermissionController::class,'ListRole'])->middleware('rolePermission:Super Admin');
+    Route::post('create-permission',[RolPermissionController::class,'createPermission'])->middleware('rolePermission:Super Admin');
+    Route::post('/create-rol',[RolPermissionController::class,'createRol'])->middleware('rolePermission:Super Admin');
 });

@@ -14,7 +14,7 @@ class AuthenticationController extends Controller
     /**
      
      *
-     * @operationId login
+     * @operationId Login
      */
     use ApiResponse;
     public function login(Request $request){
@@ -78,6 +78,11 @@ class AuthenticationController extends Controller
 
     }
 
+    /**
+     
+     *
+     * @operationId RefreshToken
+     */
     public function refresh(){
         try {
             if (!$token = auth('api')->refresh()) {
@@ -104,6 +109,11 @@ class AuthenticationController extends Controller
         }
     }
 
+    /**
+     
+     *
+     * @operationId Logout
+     */
     public function logout(){
         try {
             auth('api')->logout();
