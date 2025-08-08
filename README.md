@@ -267,6 +267,46 @@ composer queues-stop
     function calcularTotalVenta() { … }
     ```
 
+- **PHP Cache**: Ejemplo de metodo como usar cache, se debe importar el helper CacheHelper y usar su metodo remember para el uso de cache.
+    ```php
+    public function listaUsuarios(Request $request)
+    {
+        try {
+             // Usamos un cache key único para cada página/filtro
+            $page = $request->get('page', 1);
+
+            //ejemplo con cache
+           $cacheKey = "api_users_page_{$page}";
+
+            $user = CacheHelper::remember($cacheKey,600,function(){
+                return  User::with(['roles'])->paginate(10);
+            });
+
+
+          
+            $pagination = [
+                'lastPage'=>$user->lastPage(),
+                'currentPage'=>$user->currentPage(),
+                'perPage'=>$user->perPage(),
+                'total'=>$user->total()
+            ];
+
+            $userData = $user->map(function($row){
+                return [
+                    'id' => $row->id,
+                    'name'=> $row->name,
+                    'email' => $row->email
+                ];
+            });
+           return $this->success('Lista de usuarios',200,$userData, $pagination);
+        } catch (\Exception $e) {
+            //throw $th;
+            return $this->error('Error al cargar los usuarios');
+        }
+       
+    }
+    ```
+
 - **Variables**
 
   - **camelCase**
