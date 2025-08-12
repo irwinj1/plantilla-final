@@ -376,29 +376,15 @@ composer queues-stop
 - Los request en la plantilla estaran ubicados dentro de app/Http/Request.
 - Ejecutar siguientes comando para crear request:
 ```shell
-php artisan make:resquest nombreRerenciaControladorRequest
+php artisan make:request nombreRerenciaControladorRequest
 
 #Ejemplo, iguale que el controlador se puede colocar dentro de una carpeta
-php artisan make:resquest auth/AuthenticantionResquest
+php artisan make:request auth/AuthenticantionResquest
 ```
 >  Ejemplo de resquest
-<?php
-```php
-class UsersCreateRequest extends FormRequest
-{
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+```shell
+
     public function rules(): array
     {
         return [
@@ -425,9 +411,9 @@ class UsersCreateRequest extends FormRequest
             'permisos.array' => 'Los permisos deben ser un arreglo'
         ];
     }
-}
 
 ```
+
 # Testing
 ## comandos a ejecutar
 > 💡 Si estás usando Docker, ejecuta estos comandos:
@@ -552,15 +538,6 @@ public function test_login_with_invalid_email_returns_validation_error(): void
   - Verifican estructura JSON
 
 ```php
-<?php
-
-namespace Tests\Feature\Public\Auth;
-
-use App\Models\Auth\AuthUsuario;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -601,13 +578,7 @@ class AuthTest extends TestCase
   - Prueban lógica específica
 
 ```php
-<?php
 
-namespace Tests\Unit\Public\Auth;
-
-use App\Models\Auth\AuthUsuario;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -680,44 +651,44 @@ public function test_login_with_empty_credentials_returns_validation_errors(): v
 
 ### Verificaciones de Respuesta HTTP
 
-```php
-// Estado HTTP
+```shell
+# Estado HTTP
 $response->assertStatus(200);
 $response->assertStatus(422);
 $response->assertStatus(401);
 
-// Estructura JSON
+# Estructura JSON
 $response->assertJsonStructure([
     'access_token',
     'token_type',
     'expires_in',
 ]);
 
-// Contenido específico
+# Contenido específico
 $response->assertJson([
     'token_type' => 'bearer',
 ]);
 
-// Errores de validación
+# Errores de validación
 $response->assertJsonValidationErrors(['email']);
 $response->assertJsonValidationErrors(['email', 'password']);
 ```
 
 ### Verificaciones de Datos
 
-```php
-// Verificar tipos de datos
+```shell
+# Verificar tipos de datos
 $this->assertIsString($response->json('access_token'));
 $this->assertIsInt($response->json('expires_in'));
 $this->assertIsNumeric($responseData['expires_in']);
 
-// Verificar valores no vacíos
+# Verificar valores no vacíos
 $this->assertNotEmpty($response->json('access_token'));
 
-// Verificar rangos
+# Verificar rangos
 $this->assertGreaterThan(0, $response->json('expires_in'));
 
-// Verificar patrones (ej: JWT)
+# Verificar patrones (ej: JWT)
 $this->assertMatchesRegularExpression(
     '/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/', 
     $responseData['access_token']
@@ -730,14 +701,14 @@ $this->assertMatchesRegularExpression(
 
 Usar `RefreshDatabase` en tests que modifiquen la base de datos:
 
-```php
+```shell
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
     
-    // Tests...
+    # Tests...
 }
 ```
 
@@ -747,15 +718,15 @@ class AuthTest extends TestCase
 - **Reutilizar datos similares** en tests relacionados
 - **Hash passwords** correctamente
 
-```php
-// ✅ Datos descriptivos
+```shell
+# ✅ Datos descriptivos
 AuthUsuario::create([
     'username' => 'usuario_test',
     'email' => 'test@example.com',
     'password' => Hash::make('password123'),
 ]);
 
-// ✅ Para tests de administrador
+# ✅ Para tests de administrador
 AuthUsuario::create([
     'username' => 'admin_user',
     'email' => 'admin@example.com',
