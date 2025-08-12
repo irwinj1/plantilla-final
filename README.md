@@ -382,7 +382,7 @@ php artisan make:resquest nombreRerenciaControladorRequest
 php artisan make:resquest auth/AuthenticantionResquest
 ```
 >  Ejemplo de resquest
-<?php
+
 ```php
 class UsersCreateRequest extends FormRequest
 {
@@ -552,15 +552,6 @@ public function test_login_with_invalid_email_returns_validation_error(): void
   - Verifican estructura JSON
 
 ```php
-<?php
-
-namespace Tests\Feature\Public\Auth;
-
-use App\Models\Auth\AuthUsuario;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -601,13 +592,7 @@ class AuthTest extends TestCase
   - Prueban lógica específica
 
 ```php
-<?php
 
-namespace Tests\Unit\Public\Auth;
-
-use App\Models\Auth\AuthUsuario;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
