@@ -384,13 +384,6 @@ php artisan make:resquest auth/AuthenticantionResquest
 >  Ejemplo de resquest
 
 ```shell
-class UsersCreateRequest extends FormRequest
-{
-  
-    public function authorize(): bool
-    {
-        return true;
-    }
 
     public function rules(): array
     {
@@ -418,7 +411,7 @@ class UsersCreateRequest extends FormRequest
             'permisos.array' => 'Los permisos deben ser un arreglo'
         ];
     }
-}
+
 ```
 # Testing
 ## comandos a ejecutar
