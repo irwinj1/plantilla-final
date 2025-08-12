@@ -372,6 +372,66 @@ composer queues-stop
 - **Rutas:** Separación en públicas (`/routes/public.php`) y protegidas (`/routes/protected.php`), convención REST, evitar verbos en rutas, usar `kebab-case` para rutas de más de una palabra, máximo tres divisiones por ruta.
 - **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
 
+### 7. Request de la plantilla
+- Los request en la plantilla estaran ubicados dentro de app/Http/Request.
+- Ejecutar siguientes comando para crear request:
+```shell
+php artisan make:request nombreRerenciaControladorRequest
+
+#Ejemplo, iguale que el controlador se puede colocar dentro de una carpeta
+php artisan make:request auth/AuthenticantionResquest
+```
+>  Ejemplo de resquest
+
+```shell
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'rol'=>'required|string|max:100',
+            'permisos'=>'nullable|array'
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es obligatorio',
+            'email.required' => 'El correo es obligatorio',
+            'email.email' => 'El correo no tiene un formato válido',
+            'email.unique' => 'El correo ya está registrado',
+            'password.required' => 'La contraseña es obligatoria',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+            'password.confirmed' => 'Las contraseñas no coinciden',
+            'rol.required' => 'El rol es obligatorio',
+            'rol.max' => 'El rol no puede tener más de 100 caracteres',
+            'rol.string' => 'El rol debe ser una cadena de texto',
+            'permisos.array' => 'Los permisos deben ser un arreglo'
+        ];
+    }
+
+```
+# Testing
+## comandos a ejecutar
+> 💡 Si estás usando Docker, ejecuta estos comandos:
+```shell
+# Si esta usando docker ejecuta los siguientes comandos
+docker-compose exec app php artisan key:generate --env=testing 
+docker-compose exec app php artisan  jwt:secret --env=testing
+docker-compose exec app php artisan test
+
+```
+> 💡 Si no usas docker, ejecuta estos comandos:
+```shell
+# Si no usas docker, ejecuta los siguientes comandos
+php artisan key:generate --env=testing 
+php artisan  jwt:secret --env=testing
+php artisan test
+
+```
+ 
 
 ## Nomenclatura y lineamientos
 
