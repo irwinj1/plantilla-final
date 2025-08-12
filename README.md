@@ -383,7 +383,7 @@ php artisan make:resquest auth/AuthenticantionResquest
 ```
 >  Ejemplo de resquest
 
-```php
+```shell
 class UsersCreateRequest extends FormRequest
 {
     /**
@@ -426,7 +426,6 @@ class UsersCreateRequest extends FormRequest
         ];
     }
 }
-
 ```
 # Testing
 ## comandos a ejecutar
