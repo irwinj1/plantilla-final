@@ -372,35 +372,6 @@ composer queues-stop
 - **Rutas:** Separación en públicas (`/routes/public.php`) y protegidas (`/routes/protected.php`), convención REST, evitar verbos en rutas, usar `kebab-case` para rutas de más de una palabra, máximo tres divisiones por ruta.
 - **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
 
-### 7. Request de la plantilla
-- Los request en la plantilla estaran ubicados dentro de app/Http/Request.
-- Ejecutar siguientes comando para crear request:
-```shell
-php artisan make:resquest nombreRerenciaControladorRequest
-
-#Ejemplo, iguale que el controlador se puede colocar dentro de una carpeta
-php artisan make:resquest auth/AuthenticantionResquest
-```
-
-# Testing
-## comandos a ejecutar
-> 💡 Si estás usando Docker, ejecuta estos comandos:
-```shell
-# Si esta usando docker ejecuta los siguientes comandos
-docker-compose exec app php artisan key:generate --env=testing 
-docker-compose exec app php artisan  jwt:secret --env=testing
-docker-compose exec app php artisan test
-
-```
-> 💡 Si no usas docker, ejecuta estos comandos:
-```shell
-# Si no usas docker, ejecuta los siguientes comandos
-php artisan key:generate --env=testing 
-php artisan  jwt:secret --env=testing
-php artisan test
-
-```
- 
 
 ## Nomenclatura y lineamientos
 
