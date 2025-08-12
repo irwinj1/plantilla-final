@@ -364,14 +364,6 @@ composer queues-stop
   - Evitar **“magic numbers”**: definirlos como constantes con nombre descriptivo.
   - Aplicar **Single Responsibility Principle**: cada clase o módulo debe tener una sola responsabilidad.
 
-## Nomenclaturas
-
-- **Tablas:** Formato `snake_case`, nombres en singular, prefijo de módulo, llave primaria como `id_<nombre_tabla>`.
-- **Modelos:** Carpeta por módulo en `CamelCase`, nombre en `CamelCase`, configuración de propiedades y relaciones, uso de `SoftDeletes` para tablas transaccionales.
-- **Controladores:** Carpeta por módulo en `CamelCase`, nombre en `CamelCase` con sufijo `Controller`.
-- **Rutas:** Separación en públicas (`/routes/public.php`) y protegidas (`/routes/protected.php`), convención REST, evitar verbos en rutas, usar `kebab-case` para rutas de más de una palabra, máximo tres divisiones por ruta.
-- **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
-
 ### 7. Request de la plantilla
 - Los request en la plantilla estaran ubicados dentro de app/Http/Request.
 - Ejecutar siguientes comando para crear request:
@@ -413,6 +405,25 @@ php artisan make:request auth/AuthenticantionResquest
     }
 
 ```
+### 8. Convetional commits en plantilla
+- Siempre se debera ejecutar el comando npm install se use o no docker.
+```shell
+# En la terminal ejecutar el comando 
+git add .
+
+npx cz
+#Luego seguir las intrucciones para realizar el commit
+
+```
+
+## Nomenclaturas
+
+- **Tablas:** Formato `snake_case`, nombres en singular, prefijo de módulo, llave primaria como `id_<nombre_tabla>`.
+- **Modelos:** Carpeta por módulo en `CamelCase`, nombre en `CamelCase`, configuración de propiedades y relaciones, uso de `SoftDeletes` para tablas transaccionales.
+- **Controladores:** Carpeta por módulo en `CamelCase`, nombre en `CamelCase` con sufijo `Controller`.
+- **Rutas:** Separación en públicas (`/routes/public.php`) y protegidas (`/routes/protected.php`), convención REST, evitar verbos en rutas, usar `kebab-case` para rutas de más de una palabra, máximo tres divisiones por ruta.
+- **Almacenamiento:** Recursos estáticos en `public` con subcarpetas (`documents`, `images`), archivos de la aplicación en `/storage/app` con subcarpetas según tipo.
+
 
 # Testing
 ## comandos a ejecutar
