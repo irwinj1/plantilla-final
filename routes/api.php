@@ -17,6 +17,9 @@ Route::middleware('auth:api')->prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index'])->middleware('rolePermission:Super Admin');
     Route::post('/', [UserController::class, 'createUser'])->middleware('rolePermission:Super Admin');
     Route::post('/agregar-permisos/{userId}',[UserController::class,'AgregarPermisoUsuario'])->middleware('rolePermission:Super Admin');
+    Route::post('/asignar-rol/{userId}',[UserController::class,'AsignarRolUsuario'])->middleware('rolePermission:Super Admin');
+    Route::post('/revocar-rol/{userId}',[UserController::class,'RevocarRolUsuario'])->middleware('rolePermission:Super Admin');
+    Route::post('/revocar-permisos/{userId}',[UserController::class,'RevocarPermisoUsuario'])->middleware('rolePermission:Super Admin');
 });
 
 Route::middleware('auth:api')->prefix('rol-permisos')->group(function () {
