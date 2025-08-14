@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\CacheHelper;
 use App\Http\Requests\RolesOrPermission\AsignarPermisosUsuarioRequest;
+use App\Http\Requests\RolesOrPermission\AsignarRolUsuarioRequest;
+use App\Http\Requests\RolesOrPermission\RevocarPermisoUsuarioRequest;
+use App\Http\Requests\RolesOrPermission\RevocarRolUsuarioRequest;
 
 class UserController extends Controller
 {
@@ -125,6 +128,65 @@ class UserController extends Controller
         //throw $th;
         DB::rollBack();
         return $this->error("Error al asignar permisos");
+    }
+   }
+   /**
+    
+    *
+    * @operationId Revocar permisos a usuarios
+    */
+   public function RevocarPermisoUsuario(RevocarPermisoUsuarioRequest $request, $userId){
+    try {
+        DB::beginTransaction();
+        $validated = $request->validated();
+        $user = User::find($userId);
+        foreach($validated['permisos'] as $permiso){
+            $user->revokePermissionTo($permiso);
+        }
+        DB::commit();
+        return $this->success('Permisos revocados correctamente',200,$user);
+    } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return $this->error("Error al revocar permisos");
+    }
+   }
+
+   /**
+    
+    *
+    * @operationId Asignar rol a usuarios
+    */
+   public function AsignarRolUsuario(AsignarRolUsuarioRequest $request, $userId){
+    try {
+        DB::beginTransaction();
+        $validated = $request->validated();
+        $user = User::find($userId);
+        $user->assignRole($validated['rol']);
+        DB::commit();
+        return $this->success('Rol asignado correctamente',200,$user);
+    }catch(\Throwable $th){
+        DB::rollBack();
+        return $this->error("Error al asignar rol");
+    }
+   }
+   
+   /**
+    
+    *
+    * @operationId Revocar rol a usuarios
+    */
+   public function RevocarRolUsuario(RevocarRolUsuarioRequest $request, $userId){
+    try {
+        DB::beginTransaction();
+        $validated = $request->validated();
+        $user = User::find($userId);
+        $user->removeRole($validated['rol']);
+        DB::commit();
+        return $this->success('Rol revocado correctamente',200,$user);
+    }catch(\Throwable $th){
+        DB::rollBack();
+        return $this->error("Error al revocar rol");
     }
    }
 
