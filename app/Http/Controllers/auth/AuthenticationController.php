@@ -19,6 +19,7 @@ class AuthenticationController extends Controller
     use ApiResponse;
     public function login(Request $request){
         try {
+           
             $messages = [
                 'email.required' => 'El correo es obligatorio.',
                 'email.email' => 'El correo no es válido.',
@@ -39,7 +40,7 @@ class AuthenticationController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-    
+   
             $credentials = $request->only('email', 'password');
     
             if (!$token = auth('api')->attempt($credentials)) {
@@ -50,16 +51,19 @@ class AuthenticationController extends Controller
             }
     
             $user = auth('api')->user();
-            ActiveSesion::updateOrCreate(['user_id'=>$user->id],[
-                'roles'=>$user->getRoleNames()->toArray(),
-                'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
-                'last_activity' => now()
-            ]);
+            
+            // ActiveSesion::updateOrCreate(['user_id'=>$user->id],[
+            //     'roles'=>$user->getRoleNames()->toArray(),
+            //     'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
+            //     'last_activity' => now()
+            // ]);
+            
             if (!Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'error' => ['password' => ['La contraseña es incorrecta.']]
                 ], 401);
             }
+            
             $usuarios = [
                 'status' => true,
                 'access_token' => $token,
@@ -69,6 +73,7 @@ class AuthenticationController extends Controller
                 'roles' => $user->getRoleNames(),
                 'permissions' => $user->getAllPermissions()->pluck('name')
             ];
+            
             return $this->success('Inicio de sesión exitoso', 200, $usuarios);
     
         } catch (\Throwable $th) {

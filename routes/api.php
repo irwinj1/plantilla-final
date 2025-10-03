@@ -1,6 +1,5 @@
 <?php
-
-use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\auth\AuthenticationController;
 use App\Http\Controllers\auth\RolPermissionController;
 use App\Http\Controllers\auth\UserController;
 use Illuminate\Http\Request;
