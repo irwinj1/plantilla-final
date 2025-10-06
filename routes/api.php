@@ -10,6 +10,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
     Route::post('/logout',[AuthenticationController::class,'logout'])->middleware('rolePermission:Super Admin,Admin');
     Route::post('/refresh',[AuthenticationController::class,'refresh'])->middleware('rolePermission:Super Admin,Admin');
+    Route::post('/validate-token',[AuthenticationController::class,'validatedToken']);
 });
 
 Route::middleware('auth:api')->prefix('users')->group(function () {

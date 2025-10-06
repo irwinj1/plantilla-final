@@ -8,6 +8,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthenticationController extends Controller
 {
@@ -28,28 +30,28 @@ class AuthenticationController extends Controller
                 'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
            
             ];
-    
+
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email|exists:users,email',
                 'password' => 'required|min:8',
             ], $messages);
-    
+  
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
                     'errors' => $validator->errors()
                 ], 422);
             }
-   
+
             $credentials = $request->only('email', 'password');
-    
+           
             if (!$token = auth('api')->attempt($credentials)) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Credenciales inválidas'
                 ], 401);
             }
-    
+ 
             $user = auth('api')->user();
             
             // ActiveSesion::updateOrCreate(['user_id'=>$user->id],[
@@ -127,6 +129,33 @@ class AuthenticationController extends Controller
             $this->error('Error al cerrar sesión');
            
         }
+    }
+
+    /**
+     * 
+     * @operateId validateToken
+     */
+    public function validatedToken(Request $request){
+        try {
+        // Obtener usuario desde el token
+        $user = JWTAuth::setToken($request->token)->authenticate();
+
+        if (!$user) {
+            return $this->error('Token válido pero usuario no encontrado', 404);
+        }
+
+        // Token válido y usuario encontrado
+        return $this->success('Token válido', 200, [
+            'user' => $user
+        ]);
+
+    } catch (JWTException $e) {
+        // Error de token inválido, expirado o ausente
+        return $this->error('Token inválido o expirado', 401);
+    } catch (\Throwable $th) {
+        // Cualquier otro error inesperado
+        return $this->error('Error inesperado', 500);
+    }
     }
 }
 
